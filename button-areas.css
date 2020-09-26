@@ -1,0 +1,76 @@
+
+/* digits */
+#button-0 {
+    grid-area: zero;
+}
+
+#button-1 {
+    grid-area: one;
+}
+
+#button-2 {
+    grid-area: two;
+}
+
+#button-3 {
+    grid-area: three;
+}
+
+#button-4 {
+    grid-area: four;
+}
+
+#button-5 {
+    grid-area: five;
+}
+
+#button-6 {
+    grid-area: six;
+}
+
+#button-7 {
+    grid-area: seven;
+}
+
+#button-8 {
+    grid-area: eight;
+}
+
+#button-9 {
+    grid-area: nine;
+}
+
+/* operations */
+
+#button-mul {
+    grid-area: mul;
+}
+
+#button-div {
+    grid-area: div;
+}
+
+#button-sub {
+    grid-area: sub;
+}
+
+#button-add {
+    grid-area: add;
+}
+
+
+#button-equal {
+    grid-area: equal;
+}
+
+#button-clear {
+    grid-area: clear;
+}
+
+#button-back {
+    grid-area: back;
+}
+
+#button-dot {
+    grid-area: dot;
+}

@@ -1,0 +1,23 @@
+.digit-btn {
+    color: #444444;
+}
+
+.op-btn {
+    background-color: #EB5E28;
+    color: #FFFCE8;
+}
+
+.op-btn:hover {
+    background-color: antiquewhite;
+    color: #444444;
+}
+
+.spec-btn {
+    background-color: #424C55;
+    color: #FFFCE8;
+}
+
+.spec-btn:hover {
+    background-color: antiquewhite;
+    color: #444444;
+}

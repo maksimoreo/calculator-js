@@ -1,0 +1,59 @@
+:root {
+    --digit-btn-color: #424C55;
+    --digit-text-color: #FFFCE8;
+    --op-btn-color: #EB5E28;
+    --op-text-color: #FFFCE8;
+}
+
+#container {
+    text-align: center;
+}
+
+#calculator {
+    margin-top: 70px;
+    border-radius: 40px 40px 70px 70px;
+    padding: 20px;
+    background-color: antiquewhite;
+    display: inline-block;
+}
+
+#button-grid {
+    width: auto;
+
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(6, 100px);
+    grid-template-areas:
+    "output output output output"
+    "clear  clear  .      back"
+    "seven  eight  nine   div"
+    "four   five   six    mul"
+    "one    two    three  sub"
+    "zero   dot    equal  add";
+}
+
+.calc-btn {
+    border-radius: 50px;
+    width: auto;
+    height: auto;
+
+    font: 40px Arial;
+}
+
+#output {
+    grid-area: output;
+    background: rgba(200, 200, 200, 0.6);
+    border-radius: 50px;
+    line-height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+#output-text {
+    font: 40px Arial;
+    margin: 0 40px;
+    width: 100%;
+    text-align: end;
+    color: #444444;
+}
