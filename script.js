@@ -1,9 +1,22 @@
 const DEC_DIGITS = 6;
 
+// Keys that trigger input actions
+// (digits are hard-coded)
+const KEYS_DOT = ['.', ','];
+const KEYS_OP_ADD = ['+', 'a', 'A'];
+const KEYS_OP_SUB = ['-', 's', 'S'];
+const KEYS_OP_MUL = ['*', 'm', 'M'];
+const KEYS_OP_DIV = ['/', ':', 'd', 'D'];
+const KEYS_EQUALS = ['=', 'Enter', 'Space'];
+const KEYS_CLEAR = ['Delete', 'Escape'];
+const KEYS_BACK = ['Backspace'];
+
+// Calculator function
 function operationFunc(a, b, op) {
     let result;
     a = parseFloat(a);
     b = parseFloat(b);
+
     switch (op) {
         case 'add':
             result = a + b; break;
@@ -24,7 +37,8 @@ function operationFunc(a, b, op) {
 
     return result.toString();
 }
-// Number control
+
+let output = document.querySelector('#output-text');
 function updateOutput(text) {
     output.textContent = text;
 }
@@ -45,8 +59,6 @@ function backspaceNumber(number) {
 let currentNumber = '0';
 let lastNumber = '0';
 
-let inputToNumber = 'lastNumber';
-
 let currentOperation = null;
 let previousOperation = null;
 
@@ -66,46 +78,39 @@ function log() {
     console.log(`currentNumber: ${currentNumber}, lastNumber: ${lastNumber}, currentOperation: ${currentOperation}, previousOperation: ${previousOperation}`);
 }
 
-// Event listener for digit buttons
-for (let i = 0; i <= 9; i++) {
-    let digitButton = document.querySelector(`#button-${i}`);
-    digitButton.addEventListener('click', () => {
-        setInputNumber(writeDigit(getInputNumber(), i.toString()));
-        updateOutput(getInputNumber());
-    });
+// Input actions
+function inputWriteDigit(digit) {
+    console.log(`Input Action: ${digit}`);
+    setInputNumber(writeDigit(getInputNumber(), digit.toString()));
+    updateOutput(getInputNumber());
 }
 
-// Dot button
-let dotButton = document.querySelector('#button-dot');
-dotButton.addEventListener('click', () => {
+function inputWriteDot() {
+    console.log('Input Action: dot');
     setInputNumber(writeDot(getInputNumber()));
     updateOutput(getInputNumber());
-});
+}
 
-// Event listener for operation buttons
-['add', 'sub', 'mul', 'div'].forEach(operation => {
-    let operationButton = document.querySelector(`#button-${operation}`);
-    operationButton.addEventListener('click', () => {
-        if (currentOperation != null) {
-            // evaulate previous expression first
-            currentNumber = operationFunc(currentNumber, lastNumber, currentOperation);
-            currentOperation = operation;
-            lastNumber = '0';
-            updateOutput('0');
-        } else if (previousOperation != null) {
-            currentOperation = operation;
-            lastNumber = '0';
-            updateOutput('0');
-        } else {
-            currentOperation = operation;
-            updateOutput('0');
-        }
-    });
-});
+function inputOperation(operation) {
+    console.log(`Input Action: ${operation}`);
+    if (currentOperation != null) {
+        // evaulate previous expression first
+        currentNumber = operationFunc(currentNumber, lastNumber, currentOperation);
+        currentOperation = operation;
+        lastNumber = '0';
+        updateOutput('0');
+    } else if (previousOperation != null) {
+        currentOperation = operation;
+        lastNumber = '0';
+        updateOutput('0');
+    } else {
+        currentOperation = operation;
+        updateOutput('0');
+    }
+}
 
-// Equal button
-let equalButton = document.querySelector('#button-equal');
-equalButton.addEventListener('click', () => {
+function inputEquals() {
+    console.log('Input Action: equal');
     if (currentOperation != null) {
         currentNumber = operationFunc(currentNumber, lastNumber, currentOperation);
         updateOutput(currentNumber);
@@ -115,26 +120,78 @@ equalButton.addEventListener('click', () => {
         currentNumber = operationFunc(currentNumber, lastNumber, previousOperation);
         updateOutput(currentNumber);
     }
-});
+}
 
-// Clear button
-let clearButton = document.querySelector('#button-clear');
-clearButton.addEventListener('click', () => {
+function inputClear() {
+    console.log('Input Action: clear');
     currentNumber = '0';
     lastNumber = '0';
     currentOperation = null;
     previousOperation = null;
     updateOutput('0');
-});
+}
 
-// Back button
-let backButton = document.querySelector('#button-back');
-backButton.addEventListener('click', () => {
+function inputBackspace() {
+    console.log('Input Action: bakcspace');
     setInputNumber(backspaceNumber(getInputNumber()));
     updateOutput(getInputNumber());
+}
+
+// Bind input actions to button
+// Digit buttons
+for (let i = 0; i <= 9; i++) {
+    document.querySelector(`#button-${i}`)
+        .addEventListener('click', () => inputWriteDigit(i));
+}
+
+// Dot button
+document.querySelector('#button-dot')
+    .addEventListener('click', () => inputWriteDot());
+
+// Event listener for operation buttons
+['add', 'sub', 'mul', 'div'].forEach(operation => {
+    let operationButton = document.querySelector(`#button-${operation}`);
+    operationButton.addEventListener('click', () => inputOperation(operation));
 });
 
-// HTML Elements
-let output = document.querySelector('#output-text');
+// Equal button
+document.querySelector('#button-equal')
+    .addEventListener('click', () => inputEquals());
 
+// Clear button
+document.querySelector('#button-clear')
+    .addEventListener('click', () => inputClear());
+
+// Back button
+document.querySelector('#button-back')
+    .addEventListener('click', () => inputBackspace());
+
+// Bind input actions to key presses
+document.addEventListener('keydown', event => {
+    //console.log(`Keydown event: .key: ${event.key}, .keyCode: ${event.keyCode}`);
+    const key = event.key;
+    const keyDigit = parseInt(key, 10);
+
+    if (keyDigit !== NaN && keyDigit >= 0 && keyDigit <= 9) { // Digit
+        inputWriteDigit(keyDigit);
+    } else if (KEYS_DOT.includes(key)) { // Dot
+        inputWriteDot();
+    } else if (KEYS_OP_ADD.includes(key)) { // Add
+        inputOperation('add');
+    } else if (KEYS_OP_SUB.includes(key)) { // Subtract
+        inputOperation('sub');
+    } else if (KEYS_OP_MUL.includes(key)) { // Multiply
+        inputOperation('mul');
+    } else if (KEYS_OP_DIV.includes(key)) { // Divide
+        inputOperation('div');
+    } else if (KEYS_EQUALS.includes(key)) { // Equal
+        inputEquals();
+    } else if (KEYS_CLEAR.includes(key)) { // Clear
+        inputClear();
+    } else if (KEYS_BACK.includes(key)) { // Backspace
+        inputBackspace();
+    }
+});
+
+// On start
 updateOutput('0');
