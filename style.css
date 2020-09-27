@@ -1,8 +1,10 @@
-:root {
-    --digit-btn-color: #424C55;
-    --digit-text-color: #FFFCE8;
-    --op-btn-color: #EB5E28;
-    --op-text-color: #FFFCE8;
+html {
+    height: 100%;
+    --first-color: #646464;
+    --second-color: #4e4e4e;
+    background: linear-gradient(-45deg,
+        var(--second-color), var(--second-color) 50%,
+        var(--first-color) 50%, var(--first-color));
 }
 
 #container {
@@ -15,6 +17,7 @@
     padding: 20px;
     background-color: antiquewhite;
     display: inline-block;
+    box-shadow: 0px 0px 50px 0px rgba(0,0,0,0.4);
 }
 
 #button-grid {

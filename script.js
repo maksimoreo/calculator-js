@@ -1,4 +1,5 @@
-const DEC_DIGITS = 6;
+const DEC_PRECISION = 6;
+const MAX_DIGITS = 15;
 
 // Keys that trigger input actions
 // (digits are hard-coded)
@@ -7,7 +8,7 @@ const KEYS_OP_ADD = ['+', 'a', 'A'];
 const KEYS_OP_SUB = ['-', 's', 'S'];
 const KEYS_OP_MUL = ['*', 'm', 'M'];
 const KEYS_OP_DIV = ['/', ':', 'd', 'D'];
-const KEYS_EQUALS = ['=', 'Enter', 'Space'];
+const KEYS_EQUALS = ['=']; // do not use 'Enter' or 'Space', they also activate buttons!
 const KEYS_CLEAR = ['Delete', 'Escape'];
 const KEYS_BACK = ['Backspace'];
 
@@ -25,13 +26,25 @@ function operationFunc(a, b, op) {
         case 'mul':
             result = a * b; break;
         case 'div':
+            if (parseInt(b, 10) == 0) {
+                alert("Division by zero! Operation canceled.");
+                return a;
+            }
+
             result = a / b; break;
         default:
             console.log(`Invalid operation: ${op}`);
             break;
     }
 
-    result = Math.round(result * Math.pow(10, DEC_DIGITS)) / Math.pow(10, DEC_DIGITS);
+    result = 
+        (Math.round(result * Math.pow(10, DEC_PRECISION)) / Math.pow(10, DEC_PRECISION))
+        .toString();
+
+    if (result.length >= MAX_DIGITS) {
+        alert(`Result exceeded max number length (${MAX_DIGITS} digits)! Operation canceled.`);
+        return a;
+    }
 
     console.log(`Expression evaluated: ${a} ${op} ${b} = ${result}`);
 
@@ -44,7 +57,14 @@ function updateOutput(text) {
 }
 
 function writeDigit(number, digit) {
-    return number == '0' ? digit : number + digit;
+    if (number == '0') {
+        return digit;
+    } else if (number.length < MAX_DIGITS) {
+        return number + digit;
+    } else {
+        alert(`Exceeded max number length (${MAX_DIGITS} digits)!`);
+        return number;
+    }
 }
 
 function writeDot(number) {
@@ -146,7 +166,7 @@ for (let i = 0; i <= 9; i++) {
 
 // Dot button
 document.querySelector('#button-dot')
-    .addEventListener('click', () => inputWriteDot());
+    .addEventListener('click', inputWriteDot);
 
 // Event listener for operation buttons
 ['add', 'sub', 'mul', 'div'].forEach(operation => {
@@ -156,15 +176,15 @@ document.querySelector('#button-dot')
 
 // Equal button
 document.querySelector('#button-equal')
-    .addEventListener('click', () => inputEquals());
+    .addEventListener('click', inputEquals);
 
 // Clear button
 document.querySelector('#button-clear')
-    .addEventListener('click', () => inputClear());
+    .addEventListener('click', inputClear);
 
 // Back button
 document.querySelector('#button-back')
-    .addEventListener('click', () => inputBackspace());
+    .addEventListener('click', inputBackspace);
 
 // Bind input actions to key presses
 document.addEventListener('keydown', event => {
